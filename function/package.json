@@ -1,0 +1,12 @@
+{
+  "name": "send-inquiry-function",
+  "version": "1.0.0",
+  "description": "Cloud Function לשליחת מייל מקטלוג מארזי קינוחים – SMTP ישיר",
+  "main": "index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.0"
+  }
+}

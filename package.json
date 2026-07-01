@@ -1,0 +1,18 @@
+{
+  "name": "catalog-project",
+  "version": "1.0.0",
+  "description": "דף קטלוג אינטרנטי סטטי, נגיש דרך קישור שנשלח במייל. הדף מציג מוצרים בכרטיסים ומאפשר לגולשים לשלוח פנייה ליצירת קשר דרך טופס. הפנייה נשלחת במייל לבעלת החנות.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "nodemailer": "^9.0.1",
+    "sharp": "^0.35.2"
+  }
+}

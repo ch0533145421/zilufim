@@ -1,0 +1,560 @@
+/* ============================================
+   Google Fonts – פונט אלגנטי
+   ============================================ */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&family=Heebo:wght@200;300;400;500;700&display=swap');
+
+/* ============================================
+   איפוס כללי
+   ============================================ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Heebo', 'Rubik', 'Noto Sans Hebrew', sans-serif;
+  color: #f5f0e8;
+  background-color: #1a1008;
+  line-height: 1.7;
+  direction: rtl;
+  background-image: url('../images/תמונת רקע לשלב ב.png');  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 16, 8, 0.58);
+  backdrop-filter: none;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   Header / Hero – הפניה בתוך ה-Hero
+   ============================================ */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 550px;
+  background: url('../images/תמונת רקע לשלב ב.png') center/cover no-repeat;  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 16, 8, 0.45);
+  backdrop-filter: none;
+  z-index: 1;
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 2rem 0 2rem;
+}
+
+/* לוגו */
+.logo {
+  width: 400px;
+  height: auto;
+  margin-bottom: 2rem;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 4px rgba(212, 175, 55, 0.5),
+    0 0 30px rgba(212, 175, 55, 0.25),
+    0 8px 40px rgba(0, 0, 0, 0.4);
+  animation: logoGlow 3s ease-in-out infinite, logoFloat 4s ease-in-out infinite;
+  transition: transform 0.4s ease;
+}
+
+.logo:hover {
+  transform: scale(1.06);
+}
+
+@keyframes logoGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px rgba(212, 175, 55, 0.5),
+      0 0 30px rgba(212, 175, 55, 0.25),
+      0 8px 40px rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 0 8px rgba(212, 175, 55, 0.35),
+      0 0 50px rgba(212, 175, 55, 0.4),
+      0 8px 50px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.hero h1 {
+  font-family: 'Heebo', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 200;
+  color: #d4af37;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  font-weight: 300;
+  color: #f5f0e8;
+  letter-spacing: 0.06em;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* הפניה לקטלוג – בתוך ה-Hero, בתחתית */
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: inline-block;
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: #d4af37;
+  text-decoration: none;
+  border: 1px solid rgba(212, 175, 55, 0.6);
+  border-radius: 30px;
+  padding: 0.65rem 2.5rem;
+  letter-spacing: 0.08em;
+  background: rgba(26, 16, 8, 0.5);
+  backdrop-filter: blur(6px);
+  transition: all 0.35s ease;
+}
+
+.hero-scroll:hover {
+  background: #d4af37;
+  color: #1a1008;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+  border-color: #d4af37;
+}
+
+/* ============================================
+   קטלוג מוצרים
+   ============================================ */
+.catalog-section {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 2rem 5rem;
+  background: rgba(26, 16, 8, 0.48);
+  backdrop-filter: none;
+}
+
+.catalog-section::before {
+  content: 'הקולקציה שלנו';
+  display: block;
+  text-align: center;
+  font-family: 'Heebo', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 200;
+  color: #d4af37;
+  letter-spacing: 0.08em;
+  margin-bottom: 0;
+}
+
+/* הערת כשרות – עברה ל-Hero */
+.kashrut-hero {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: #d4af37;
+  letter-spacing: 0.05em;
+  margin-top: 0.75rem;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+    max-width: 380px;
+  }
+  .catalog-section::before {
+    font-size: 1.6rem;
+  }
+}
+
+/* ============================================
+   כרטיס מוצר
+   ============================================ */
+.product-card {
+  background: linear-gradient(145deg, rgba(44, 31, 18, 0.92) 0%, rgba(30, 20, 10, 0.95) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45), 0 0 25px rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+
+.product-card img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.product-card img:hover {
+  opacity: 0.85;
+}
+
+.product-card h3 {
+  margin: 16px 0 6px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #d4af37;
+  letter-spacing: 0.04em;
+}
+
+.product-card p {
+  padding: 0 20px;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: #c4b8a8;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.product-card .price {
+  font-size: 1.25rem;
+  font-weight: 500;
+  padding: 12px 20px 0;
+  color: #e8dcc8;
+  letter-spacing: 0.03em;
+}
+
+.product-card .kosher {
+  font-size: 0.8rem;
+  padding: 6px 20px 18px;
+  color: #9b8c7a;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================
+   Lightbox – הגדלת תמונות
+   ============================================ */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightbox.active {
+  display: flex;
+}
+
+.lightbox-img {
+  max-width: 85vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 60px rgba(212, 175, 55, 0.15);
+  transition: transform 0.35s ease;
+  cursor: default;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  left: 2rem;
+  font-size: 2.5rem;
+  font-weight: 200;
+  color: #d4af37;
+  cursor: pointer;
+  z-index: 1001;
+  transition: color 0.3s ease, transform 0.3s ease;
+  line-height: 1;
+}
+
+.lightbox-close:hover {
+  color: #fff;
+  transform: scale(1.15);
+}
+
+/* ============================================
+   אזור יצירת קשר – מסגרת זהב מודגשת
+   ============================================ */
+.contact-section {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 2rem;
+  background: rgba(26, 16, 8, 0.48);
+  backdrop-filter: none;
+}
+
+.contact-container {
+  max-width: 580px;
+  margin: 0 auto;
+  text-align: center;
+  border: 2px solid rgba(212, 175, 55, 0.45);
+  border-radius: 16px;
+  padding: 3rem 2.5rem;
+  background: rgba(26, 16, 8, 0.6);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.08);
+}
+
+.contact-heading {
+  font-family: 'Heebo', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 200;
+  color: #d4af37;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.04em;
+}
+
+.contact-subheading {
+  font-size: 1rem;
+  font-weight: 300;
+  color: #c4b8a8;
+  margin-bottom: 2.5rem;
+}
+
+/* ============================================
+   טופס
+   ============================================ */
+.contact-form {
+  text-align: right;
+}
+
+.form-group {
+  margin-bottom: 1.3rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: #d4af37;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.03em;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem 1.1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 300;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f5f0e8;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #6b5f52;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #d4af37;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+}
+
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #c0392b;
+}
+
+.error-message {
+  display: block;
+  font-size: 0.8rem;
+  color: #c0392b;
+  margin-top: 0.25rem;
+  min-height: 1rem;
+  font-weight: 300;
+}
+
+/* כפתור שליחה */
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.9rem 2rem;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: #1a1008;
+  background: linear-gradient(135deg, #d4af37 0%, #c5a028 100%);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #e0be4a 0%, #d4af37 100%);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+  background: #5c5040;
+  color: #8c8070;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Spinner */
+.spinner {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(26, 16, 8, 0.2);
+  border-top-color: #1a1008;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.submit-btn.loading .spinner {
+  display: inline-block;
+}
+
+.submit-btn.loading .btn-text {
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* הודעות – בעיצוב תואם לעמוד */
+.form-success,
+.form-error {
+  display: none;
+  margin-top: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 300;
+  text-align: center;
+  border: 1px solid;
+}
+
+.form-success {
+  background: rgba(46, 125, 50, 0.08);
+  color: #a5d6a7;
+  border-color: rgba(212, 175, 55, 0.3);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.form-success .success-icon {
+  font-size: 2rem;
+  color: #d4af37;
+  font-weight: 200;
+}
+
+.form-success .success-sub {
+  font-size: 0.85rem;
+  color: #c4b8a8;
+}
+
+.form-error {
+  background: rgba(198, 40, 40, 0.08);
+  color: #ef9a9a;
+  border-color: rgba(198, 40, 40, 0.25);
+}
+
+.form-error .error-icon {
+  display: block;
+  font-size: 1.5rem;
+  color: #ef9a9a;
+  margin-bottom: 0.3rem;
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 1.8rem 1rem;
+  background: rgba(26, 16, 8, 0.5);
+  backdrop-filter: none;
+  color: #6b5f52;
+  font-size: 0.8rem;
+  font-weight: 300;
+  border-top: 1px solid rgba(212, 175, 55, 0.12);
+  letter-spacing: 0.04em;
+}
