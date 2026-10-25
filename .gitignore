@@ -1,2 +1,27 @@
 node_modules/
+.env
 .DS_Store
+
+# backups
+/backup/
+
+# previews and artifacts
+dist-preview/
+_merge-artifacts/
+zilufim-preview.zip
+*.zip
+*.tmp
+
+# QA harness
+.qa/
+qa_*.js
+qa_*.html
+
+# reference snapshots
+_live-reference/
+
+# raw sources
+newimages/
+
+# session docs
+session-*.md

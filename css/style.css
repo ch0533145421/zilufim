@@ -197,26 +197,89 @@ body::before {
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
   max-width: 1150px;
   margin: 0 auto;
 }
 
-@media (max-width: 900px) {
+/* טאבלט: 3 עמודות */
+@media (max-width: 1024px) {
   .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
 }
 
-@media (max-width: 600px) {
+/* מובייל: 2 עמודות */
+@media (max-width: 640px) {
   .products-grid {
-    grid-template-columns: 1fr;
-    max-width: 380px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    max-width: 100%;
   }
   .catalog-section::before {
     font-size: 1.6rem;
+  }
+}
+
+/* ============================================
+   אריח גלריה – תמונה בלבד, ללא גבול/צל/רקע
+   ============================================ */
+.gallery-tile {
+  margin: 0;
+  aspect-ratio: 3 / 2;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* תמונות גבוהות מהאריח – מצמידים את החלק העליון לחלק העליון של האריח,
+   כדי שהחיתוך ייפול רק בתחתית. חל על tricolad-layers בלבד. */
+.gallery-tile--top img {
+  object-position: center top;
+}
+
+.gallery-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-tile img:hover {
+  opacity: 0.88;
+}
+
+/* משבצת שמורה – מקום לתמונה שטרם הגיעה, ללא תמונה וללא אינטראקציה */
+.gallery-tile.is-empty {
+  background: rgba(26, 16, 8, 0.35);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* אנימציית כניסה מדורגת – מופעלת רק כשה-JS מסמן את הגלריה */
+.gallery-tile.is-animating {
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+}
+
+.gallery-tile.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 700ms ease-out, transform 700ms ease-out;
+  /* הדירוג נעשה ב-setTimeout ב-JS – אין השהיית CSS נוספת */
+  transition-delay: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-tile.is-animating,
+  .gallery-tile.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

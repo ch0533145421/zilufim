@@ -1,54 +1,64 @@
 // ============================================
-// מערך נתוני מוצרים
+// מערך נתוני הגלריה – תמונות בלבד, מסודרות לפי דפוס השחמט המאושר
+// (הסדר כאן הוא סדר המיקומים בגלריה; סדר האנימציה נקבע בנפרד ב-REVEAL_ORDER)
 // ============================================
-const products = [
+const galleryImages = [
   {
-    id: "alpakores",
-    name: "אלפחורס",
-    description: "עוגיות קרמל ממולאות ריבה ואגוזים, מצופות שוקולד",
-    price: 120,
-    kosher: "חלבי",
-    imageUrl: "images/alpakores.jpg"
+    id: "tricolad-layers",
+    alt: "טריקולד בשלוש שכבות שוקולד - חום, לבן וחום - בציפוי מבריק",
+    imageUrl: "images/products/tricolad-layers.webp"
   },
   {
-    id: "brownies",
-    name: "בראוניס",
-    description: "קוביות בראוניס עשירות, רכות ונימוחות",
-    price: 130,
-    kosher: "פרווה / חלבי",
-    imageUrl: "images/brownies.png"
+    id: "white-chocolate-cake",
+    alt: "עוגת שוקולד לבנה בגווני שמנת עם קישוטים עדינים באווירה יוקרתית",
+    imageUrl: "images/products/white-chocolate-cake.webp"
   },
   {
-    id: "tricolad",
-    name: "טריקולד",
-    description: "שלוש שכבות שוקולד מובחר – מפנק במיוחד",
-    price: 180,
-    kosher: "חלבי",
-    imageUrl: "images/tricolad.jpg"
+    id: "cheesecake-plum",
+    alt: "עוגת גבינה קרה בציפוי לבן מבריק, מעוטרת בשזיף ועלי פרי",
+    imageUrl: "images/products/cheesecake-plum.webp"
   },
   {
-    id: "huledet_ben",
-    name: "הולדת בן",
-    description: "מארז חגיגי לאירוח",
-    price: 220,
-    kosher: "חלבי",
-    imageUrl: "images/huledet_ben.png"
+    id: "braided-babka",
+    alt: "בבקה שוקולד קלועה ומבריקה עם צמות שוקולד על פלטה כהה",
+    imageUrl: "images/products/braided-babka.webp"
   },
   {
-    id: "huledet_bat",
-    name: "הולדת בת",
-    description: "מארז חגיגי לאירוח",
-    price: 220,
-    kosher: "חלבי",
-    imageUrl: "images/huledet_bat.png"
+    id: "cookie-layer-cake",
+    alt: "עוגת שכבות עם קרם, מקרונים סגולים וכוס קפה",
+    imageUrl: "images/products/cookie-layer-cake.webp"
   },
   {
-    id: "cake_gvina",
-    name: "עוגת גבינה",
-    description: "עוגת גבינה קרמית, אפויה או קרה",
-    price: 130,
-    kosher: "חלבי",
-    imageUrl: "images/cake_gvina.png"
+    id: "alfajores-tower",
+    alt: "אלפחורס מצופות שוקולד מסודרות במתקן זכוכית גבוה",
+    imageUrl: "images/products/alfajores-tower.webp"
+  },
+  {
+    id: "dessert-platter-gold",
+    alt: "מגש עץ עם מבחר קינוחים ומאפים ונגיעות זהב בתאורה חמה",
+    imageUrl: "images/products/dessert-platter-gold.webp"
+  },
+  {
+    id: "chocolate-cups-display",
+    alt: "קינוחי שוקולד בכוסות דקורטיביות בסגנון יוקרתי כהה",
+    imageUrl: "images/products/chocolate-cups-display.webp"
+  },
+  // משבצת שמורה לתמונה חדשה מהלקוחה – נשארת במיקום 9 עד שתגיע התמונה
+  { id: "placeholder-pending", empty: true },
+  {
+    id: "40th-birthday-cake",
+    alt: "עוגת יום הולדת לבנה גבוהת שכבות עם קישוטי זהב ומספר 40",
+    imageUrl: "images/products/40th-birthday-cake.webp"
+  },
+  {
+    id: "brownies-closeup",
+    alt: "קוביות בראוניס שוקולד עשירות בצילום תקריב על רקע כהה",
+    imageUrl: "images/products/brownies-closeup.webp"
+  },
+  {
+    id: "baby-boy-gift-box",
+    alt: "מארז מתנה כחול-לבן לקינוחים לרגל הולדת בן",
+    imageUrl: "images/products/baby-boy-gift-box.webp"
   }
 ];
 
@@ -101,32 +111,110 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ============================================
-// פונקציית אתחול – טעינת מוצרים לקטלוג
+// רינדור גלריית תמונות – תמונה בלבד בכל כרטיס
 // ============================================
-function renderProducts() {
+function renderGallery() {
   const grid = document.getElementById("productsGrid");
   if (!grid) return;
 
-  grid.innerHTML = products
-    .map(
-      (p) => `
-    <div class="product-card">
-      <img src="${p.imageUrl}" alt="${p.name}" loading="lazy" data-full="${p.imageUrl}" />
-      <h3>${p.name}</h3>
-      <p>${p.description}</p>
-      <div class="price">₪${p.price}</div>
-      <div class="kosher">${p.kosher}</div>
-    </div>
-    `
-    )
+  grid.innerHTML = galleryImages
+    .map((item) => {
+      // משבצת ריקה – ללא תמונה, שומרת על מקום בגריד
+      if (item.empty) {
+        return `<figure class="gallery-tile is-empty" aria-hidden="true"></figure>`;
+      }
+      // אריחים רחבים — מוצמדים לשפה העליונה, כדי שלא ייחתכו מלמעלה
+      const tileClass =
+        item.id === "tricolad-layers" ? "gallery-tile gallery-tile--top" : "gallery-tile";
+
+      return `
+      <figure class="${tileClass}">
+        <img src="${item.imageUrl}" alt="${item.alt}" loading="lazy" width="1200" height="800" data-full="${item.imageUrl}" />
+      </figure>
+    `;
+    })
     .join("");
 
-  // Hook lightbox clicks on all product images
+  // Hook lightbox clicks on all gallery images
   grid.querySelectorAll("img[data-full]").forEach((img) => {
     img.addEventListener("click", () => {
       openLightbox(img.getAttribute("data-full"));
     });
   });
+
+  revealGalleryTiles(grid);
+}
+
+// ============================================
+// אנימציית כניסה מדורגת – רצף קבוע, פעם אחת
+// ============================================
+const REVEAL_STAGGER_MS = 200; // השהיה בין אריח לאריח (ללא גג)
+
+// סדר ההופעה הקבוע (אינדקסים בדף, 1-based): כהה ואז בהיר
+const REVEAL_ORDER = [1, 3, 6, 8, 9, 11, 2, 4, 5, 7, 10, 12];
+
+let galleryRevealDone = false;
+let galleryObserver = null;
+
+/**
+ * מפעיל את הרצף המלא פעם אחת, לפי REVEAL_ORDER.
+ * ההשהיה של כל אריח נקבעת לפי מיקומו ברצף – לא לפי מיקום בגלילה.
+ */
+function playGalleryReveal(tiles) {
+  REVEAL_ORDER.forEach((pageIndex, sequenceIndex) => {
+    const tile = tiles[pageIndex - 1];
+    if (!tile) return;
+
+    setTimeout(() => {
+      tile.classList.remove("is-animating");
+      tile.classList.add("is-visible");
+    }, sequenceIndex * REVEAL_STAGGER_MS);
+  });
+}
+
+function revealGalleryTiles(grid) {
+  const tiles = Array.from(grid.querySelectorAll(".gallery-tile"));
+  if (!tiles.length || !("IntersectionObserver" in window)) return;
+
+  // כיבוד prefers-reduced-motion: מציגים מיד, בלי אנימציה
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    tiles.forEach((tile) => tile.classList.add("is-visible"));
+    return;
+  }
+
+  // אתר שנטען כשה-JS כבר רץ אחרי DOMContentLoaded – הגלריה עלולה להיות
+  // כבר בפורטה והצופה לא יקבל callback. במקרה כזה מפעילים ישירות.
+  const rect = grid.getBoundingClientRect();
+  const alreadyInViewport =
+    rect.top < window.innerHeight && rect.bottom > 0;
+
+  tiles.forEach((tile) => tile.classList.add("is-animating"));
+
+  if (alreadyInViewport) {
+    galleryRevealDone = true;
+    // requestAnimationFrame – כדי שהמצב ההתחלתי (opacity 0) ייצבע לפני המעבר
+    requestAnimationFrame(() => playGalleryReveal(tiles));
+    return;
+  }
+
+  // צופה יחיד על המכל – ההפעלה לפי כניסת הגלריה לפורטה, לא לפי אריח בודד
+  galleryObserver = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting || galleryRevealDone) return;
+
+        galleryRevealDone = true;
+        obs.unobserve(grid); // לא לרוץ שוב בגלילה חזרה
+        galleryObserver = null;
+
+        // requestAnimationFrame – כדי שהמצב ההתחלתי (opacity 0) ייצבע לפני המעבר
+        requestAnimationFrame(() => playGalleryReveal(tiles));
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  galleryObserver.observe(grid);
 }
 
 // ============================================
@@ -305,4 +393,4 @@ document.querySelector('.hero-scroll[href="#catalog"]')?.addEventListener("click
 // ============================================
 // הרצה ראשונית
 // ============================================
-document.addEventListener("DOMContentLoaded", renderProducts);
+document.addEventListener("DOMContentLoaded", renderGallery);
