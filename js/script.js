@@ -69,9 +69,13 @@ const EMAILJS_PUBLIC_KEY = "xuogW7_j6a-5vTst3";
 const EMAILJS_SERVICE_ID = "gmail_service45421";
 const EMAILJS_TEMPLATE_ID = "template_cja11lp";
 
-// אתחול EmailJS
+// אתחול EmailJS – מוגן: אם ה-CDN חסום, שאר האתר ממשיך לרוץ
 (function() {
-  emailjs.init(EMAILJS_PUBLIC_KEY);
+  try {
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+  } catch (e) {
+    console.warn("[zilufim] EmailJS לא נטען — הטופס לא ישלח, שאר האתר ממשיך");
+  }
 })();
 
 // ============================================
@@ -231,6 +235,20 @@ const fullNameError = document.getElementById("fullNameError");
 const phoneError = document.getElementById("phoneError");
 const emailError = document.getElementById("emailError");
 
+// הודעת הטופס הכללית – עוטפת את #formError הקיים
+const FORM_ERROR_DEFAULT_TEXT = "אופס, משהו השתבש. אנא נסו שוב מאוחר יותר.";
+const formErrorText = formError.querySelector("p");
+
+function showFormMessage(text) {
+  formErrorText.textContent = text;
+  formError.style.display = "block";
+  formError.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function resetFormMessage() {
+  formErrorText.textContent = FORM_ERROR_DEFAULT_TEXT;
+}
+
 // פונקציית אימות
 function validateForm(data) {
   let isValid = true;
@@ -299,6 +317,12 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
+  // ── הגנה: EmailJS לא נטען (CDN חסום) ──
+  if (typeof emailjs === "undefined" || !emailjs?.send) {
+    showFormMessage("הטופס אינו זמין כרגע. נא ליצור קשר בטלפון 054-8523522.");
+    return;
+  }
+
   // מצב טעינה
   submitBtn.disabled = true;
   submitBtn.classList.add("loading");
@@ -359,6 +383,7 @@ form.addEventListener("submit", async (e) => {
     formSuccess.scrollIntoView({ behavior: "smooth", block: "center" });
   } catch (err) {
     console.error("שגיאה בשליחת הטופס:", err);
+    resetFormMessage();
     formError.style.display = "block";
   } finally {
     submitBtn.disabled = false;
