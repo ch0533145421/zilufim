@@ -43,8 +43,11 @@ const galleryImages = [
     alt: "קינוחי שוקולד בכוסות דקורטיביות בסגנון יוקרתי כהה",
     imageUrl: "images/products/chocolate-cups-display.webp"
   },
-  // משבצת שמורה לתמונה חדשה מהלקוחה – נשארת במיקום 9 עד שתגיע התמונה
-  { id: "placeholder-pending", empty: true },
+  {
+    id: "baby-boy-gift-box",
+    alt: "מארז מתנה כחול-לבן לקינוחים לרגל הולדת בן",
+    imageUrl: "images/products/baby-boy-gift-box.webp"
+  },
   {
     id: "40th-birthday-cake",
     alt: "עוגת יום הולדת לבנה גבוהת שכבות עם קישוטי זהב ומספר 40",
@@ -56,9 +59,9 @@ const galleryImages = [
     imageUrl: "images/products/brownies-closeup.webp"
   },
   {
-    id: "baby-boy-gift-box",
-    alt: "מארז מתנה כחול-לבן לקינוחים לרגל הולדת בן",
-    imageUrl: "images/products/baby-boy-gift-box.webp"
+    id: "chocolate-nougat-pie",
+    alt: "פאי שוקולד נוגט בציפוי גנאש מבריק, מעוטר בשבבי שוקולד ופירות יער",
+    imageUrl: "images/products/chocolate_nougat_pie.webp"
   }
 ];
 
