@@ -46,7 +46,7 @@ body::before {
   position: relative;
   height: 100vh;
   min-height: 550px;
-  background: url('../images/תמונת רקע לשלב ב.png') center/cover no-repeat;  display: flex;
+  background: url('../images/hero-bg.webp') center/cover no-repeat;  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
