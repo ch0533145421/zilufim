@@ -331,40 +331,54 @@ form.addEventListener("submit", async (e) => {
   submitBtn.classList.add("loading");
 
   try {
-    // בניית HTML אלגנטי למייל בעיצוב תואם לאתר
+    // בניית HTML אלגנטי למייל – כרטיסים בהירים עם פס זהב וקישורים חיים
     const htmlContent = `
-<div dir="rtl" style="font-family: 'Heebo', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #1a1008; padding: 0; border-radius: 12px; overflow: hidden; border: 1px solid rgba(212,175,55,0.25); direction: rtl;">
-  <!-- Header -->
-  <div style="background: linear-gradient(135deg, rgba(26,16,8,0.95), rgba(44,31,18,0.95)); padding: 28px 24px 18px; text-align: center; border-bottom: 1px solid rgba(212,175,55,0.2);">
-    <h2 style="color: #d4af37; font-family: 'Heebo', Arial, sans-serif; font-weight: 200; font-size: 22px; letter-spacing: 2px; margin: 0;">פנייה חדשה מהקטלוג</h2>
-    <p style="color: #c4b8a8; font-size: 13px; margin: 6px 0 0; font-weight: 300;">אומנות שאפשר להעריך</p>
-  </div>
-  <!-- Body -->
-  <div style="padding: 24px;">
-    <table style="width: 100%; border-collapse: collapse; direction: rtl;">
-      <tr>
-        <td style="padding: 10px 0; font-weight: 500; color: #d4af37; width: 100px; vertical-align: top; font-size: 14px;">שם מלא:</td>
-        <td style="padding: 10px 0; color: #f5f0e8; font-size: 14px;">${escapeHtml(formData.fullName)}</td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 0; font-weight: 500; color: #d4af37; width: 100px; vertical-align: top; font-size: 14px;">טלפון:</td>
-        <td style="padding: 10px 0; color: #f5f0e8; font-size: 14px; direction: ltr; text-align: left; unicode-bidi: plaintext;">${escapeHtml(formData.phone)}</td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 0; font-weight: 500; color: #d4af37; width: 100px; vertical-align: top; font-size: 14px;">אימייל:</td>
-        <td style="padding: 10px 0; color: #f5f0e8; font-size: 14px; direction: ltr; text-align: left; unicode-bidi: plaintext;">${escapeHtml(formData.email || "לא צוין")}</td>
-      </tr>
-      <tr>
-        <td style="padding: 10px 0; font-weight: 500; color: #d4af37; width: 100px; vertical-align: top; font-size: 14px;">הודעה:</td>
-        <td style="padding: 10px 0; color: #f5f0e8; font-size: 14px; white-space: pre-wrap;">${escapeHtml(formData.message || "לא צוינה הודעה")}</td>
-      </tr>
+<table dir="rtl" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAF7F2;padding:28px 12px;direction:rtl;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#FFFFFF;border:1px solid #EADFCB;border-collapse:collapse;font-family:'Heebo','Segoe UI',Arial,sans-serif;">
+
+  <tr><td style="background:#3E2723;padding:24px 32px;text-align:center;">
+    <div style="color:#D4AF37;font-size:19px;letter-spacing:3px;font-weight:600;">ZILUFIM</div>
+    <div style="color:#E8D8B8;font-size:12px;margin-top:6px;letter-spacing:1px;">אומנות שאפשר להעריך</div>
+  </td></tr>
+
+  <tr><td style="padding:26px 32px 4px;text-align:right;">
+    <div style="color:#3E2723;font-size:17px;font-weight:600;">פנייה חדשה מהקטלוג</div>
+  </td></tr>
+
+  <tr><td style="padding:18px 32px 6px;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+      <tr><td style="background:#FAF6EF;border-right:3px solid #D4AF37;border-radius:4px;padding:14px 18px;">
+        <div style="color:#8A7A66;font-size:11px;letter-spacing:1px;">שם מלא</div>
+        <div style="color:#3D2E22;font-size:15px;font-weight:600;margin-top:4px;">${escapeHtml(formData.fullName)}</div>
+      </td></tr>
+      <tr><td style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+      <tr><td style="background:#FAF6EF;border-right:3px solid #D4AF37;border-radius:4px;padding:14px 18px;">
+        <div style="color:#8A7A66;font-size:11px;letter-spacing:1px;">טלפון</div>
+        <div style="margin-top:4px;"><a href="tel:${escapeHtml(formData.phone)}" dir="ltr" style="color:#B8912F;font-size:16px;font-weight:700;text-decoration:none;">${escapeHtml(formData.phone)}</a></div>
+      </td></tr>
+      <tr><td style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+      <tr><td style="background:#FAF6EF;border-right:3px solid #D4AF37;border-radius:4px;padding:14px 18px;">
+        <div style="color:#8A7A66;font-size:11px;letter-spacing:1px;">אימייל</div>
+        <div style="margin-top:4px;"><a href="mailto:${escapeHtml(formData.email)}" dir="ltr" style="color:#B8912F;font-size:14px;font-weight:600;text-decoration:none;">${escapeHtml(formData.email || "לא צוין")}</a></div>
+      </td></tr>
+      <tr><td style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+      <tr><td style="background:#FAF6EF;border-right:3px solid #D4AF37;border-radius:4px;padding:14px 18px;">
+        <div style="color:#8A7A66;font-size:11px;letter-spacing:1px;">הודעה</div>
+        <div style="color:#3D2E22;font-size:14px;line-height:1.7;margin-top:4px;white-space:pre-wrap;">${escapeHtml(formData.message || "לא צוינה הודעה")}</div>
+      </td></tr>
     </table>
-  </div>
-  <!-- Footer -->
-  <div style="border-top: 1px solid rgba(212,175,55,0.12); padding: 14px 24px; text-align: center;">
-    <p style="color: #6b5f52; font-size: 11px; margin: 0; font-weight: 300;">נשלח דרך קטלוג מארזי קינוחים • זילופים</p>
-  </div>
-</div>`;
+  </td></tr>
+
+  <tr><td style="padding:24px 32px 28px;text-align:right;">
+    <a href="mailto:${escapeHtml(formData.email)}" style="display:inline-block;background:#3E2723;color:#D4AF37;text-decoration:none;font-size:14px;font-weight:600;padding:12px 30px;border-radius:4px;">השב לפנייה</a>
+  </td></tr>
+
+  <tr><td style="background:#F7F2EA;padding:18px 32px;text-align:center;border-top:1px solid #EADFCB;">
+    <div style="color:#8A7A66;font-size:11px;line-height:1.9;">נשלח מטופס יצירת הקשר באתר זילופים<br>כל המוצרים בכשרות בד״ץ העדה החרדית</div>
+  </td></tr>
+</table>
+</td></tr></table>`;
 
     const templateParams = {
       fullName: formData.fullName,
