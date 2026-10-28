@@ -442,12 +442,12 @@ body::before {
 }
 
 .contact-container {
-  max-width: 580px;
+  max-width: 450px;
   margin: 0 auto;
   text-align: center;
   border: 2px solid rgba(212, 175, 55, 0.45);
   border-radius: 16px;
-  padding: 3rem 2.5rem;
+  padding: 2.25rem 1.9rem;
   background: rgba(26, 16, 8, 0.6);
   backdrop-filter: blur(12px);
   box-shadow: 0 0 30px rgba(212, 175, 55, 0.08);
@@ -466,7 +466,7 @@ body::before {
   font-size: 1rem;
   font-weight: 300;
   color: #c4b8a8;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.6rem;
 }
 
 /* ============================================
@@ -477,7 +477,7 @@ body::before {
 }
 
 .form-group {
-  margin-bottom: 1.3rem;
+  margin-bottom: 0.9rem;
 }
 
 .form-group label {
@@ -492,27 +492,32 @@ body::before {
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 0.8rem 1.1rem;
+  padding: 0.65rem 0.9rem;
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 300;
-  border: 1px solid rgba(212, 175, 55, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #f5f0e8;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
   transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group textarea {
+  height: 96px;
+  resize: vertical;
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #6b5f52;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
   border-color: #d4af37;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.20);
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
 }
 
