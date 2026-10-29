@@ -74,10 +74,15 @@ const EMAILJS_TEMPLATE_ID = "template_cja11lp";
 
 // אתחול EmailJS – מוגן: אם ה-CDN חסום, שאר האתר ממשיך לרוץ
 (function() {
+  if (typeof window.emailjs === "undefined") {
+    // ה-CDN לא נטען — הטופס יוצג כלא זמין דרך הבדיקה הקיימת בשורה 324
+    console.warn("[EmailJS] הספרייה לא נטענה — שליחת טופס לא תהיה זמינה");
+    return;
+  }
   try {
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-  } catch (e) {
-    console.warn("[zilufim] EmailJS לא נטען — הטופס לא ישלח, שאר האתר ממשיך");
+    window.emailjs.init(EMAILJS_PUBLIC_KEY);
+  } catch (err) {
+    console.warn("[EmailJS] אתחול נכשל:", err);
   }
 })();
 
