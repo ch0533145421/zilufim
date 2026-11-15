@@ -68,9 +68,9 @@ const galleryImages = [
 // ============================================
 // EmailJS – שליחה ישירה מהדפדפן
 // ============================================
-const EMAILJS_PUBLIC_KEY = "xuogW7_j6a-5vTst3";
-const EMAILJS_SERVICE_ID = "gmail_service45421";
-const EMAILJS_TEMPLATE_ID = "template_cja11lp";
+const EMAILJS_PUBLIC_KEY = "oUdiDtkC3MG4MFqUX";
+const EMAILJS_SERVICE_ID = "service_2egfcze";
+const EMAILJS_TEMPLATE_ID = "template_k49ghb8";
 
 // אתחול EmailJS – מוגן: אם ה-CDN חסום, שאר האתר ממשיך לרוץ
 (function() {
@@ -405,6 +405,7 @@ form.addEventListener("submit", async (e) => {
     formSuccess.scrollIntoView({ behavior: "smooth", block: "center" });
   } catch (err) {
     console.error("שגיאה בשליחת הטופס:", err);
+    console.error("[EmailJS] status:", err?.status, "text:", err?.text);
     resetFormMessage();
     formError.style.display = "block";
   } finally {
