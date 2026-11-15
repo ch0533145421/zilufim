@@ -2,17 +2,46 @@
 
 ## מטרת המערכת
 
-דף קטלוג אינטרנטי סטטי, נגיש דרך קישור שנשלח במייל. הדף מציג מוצרים בכרטיסים ומאפשר לגולשים לשלוח פנייה ליצירת קשר דרך טופס. הפנייה נשלחת במייל לבעלת החנות.
+דף קטלוג אינטרנטי סטטי, נגיש דרך קישור שנשלח במייל. הדף מציג גלריית תמונות של המוצרים ומאפשר לגולשים לשלוח פנייה ליצירת קשר דרך טופס. הפנייה נשלחת במייל לבעלת החנות.
 
 ---
 
 ## ארכיטקטורה כללית
 
-- אחסון דף הקטלוג: Cloud Storage (Bucket ציבורי)
-- טיפול בטופס: Cloud Function (HTTP trigger)
-- שליחת מייל: Cloud Function שולחת דרך Resend
-- תמונות מוצרים: Cloud Storage (Bucket ציבורי) – תיקיית images/
-- דומיין (אופציונלי): אפשר לחבר דומיין מותאם אישית
+- אחסון ופרסום האתר: Cloudflare Pages – פרויקט `zilufim`, כתובת `https://zilufim.pages.dev` (פירוט בסעיף "פרסום")
+- טיפול בטופס ושליחת מייל: EmailJS – שליחה ישירה מהדפדפן (`js/script.js`), ללא שרת, ללא Cloud Function וללא Resend
+- ספריית EmailJS: נטענת מ-CDN (`@emailjs/browser@4` דרך jsdelivr)
+- תמונות: חלק מהריפו, תיקיית `images/` – מוגשות יחד עם האתר
+- דומיין (אופציונלי): אפשר לחבר דומיין מותאם אישית דרך Cloudflare Pages
+
+---
+
+## פרסום
+
+### מה מפעיל דיפלוי
+- כל push לענף `main` ב-GitHub (`ch0533145421/zilufim`) מפעיל דיפלוי אוטומטי ל-Cloudflare Pages.
+- החיבור הוא דרך Git integration של Cloudflare – אין build command, אין workflow ב-`.github/` ואין קובץ תצורה בריפו (אין `wrangler.toml`).
+- הקבצים מוגשים כמו שהם, משורש הריפו.
+- סטטוס הדיפלוי מופיע גם ב-GitHub, כ-check בשם "Cloudflare Pages" על כל commit.
+
+### איפה רואים את הדיפלוי
+Cloudflare Dashboard ← Workers & Pages ← `zilufim` ← Deployments
+
+שם מופיעים כל הדיפלויים, הסטטוס שלהם, הלוגים, והאפשרות לחזור לגרסה קודמת (Rollback).
+
+### חיבור דומיין מותאם אישית
+1. ב-Cloudflare Dashboard ← Workers & Pages ← `zilufim` ← Custom domains ← Set up a custom domain.
+2. הזנת הדומיין ואישור.
+3. אם הדומיין רשום אצל רשם חיצוני (לא Cloudflare):
+   - הוספת הדומיין כ-zone ב-Cloudflare (Add a domain).
+   - החלפת ה-nameservers אצל הרשם לאלה ש-Cloudflare מציג.
+   - אחרי שה-zone פעיל – חזרה לשלב 1. Cloudflare יוצר את רשומת ה-DNS ואת תעודת ה-SSL אוטומטית.
+
+### GitHub Pages
+GitHub Pages אינו חלק ממסלול הפרסום הרשמי, והוא כבוי או אמור להיות כבוי (Settings ← Pages בריפו). הכתובת `ch0533145421.github.io/zilufim` אינה כתובת האתר.
+
+### שים לב
+מאחר שהאתר מוגש משורש הריפו, כל קובץ שנמצא ב-`main` נגיש ציבורית ב-`zilufim.pages.dev` – כולל `README.md`, `package.json` וקבצי ה-legacy. אין להכניס לריפו סודות או קבצים פרטיים.
 
 ---
 
@@ -25,48 +54,69 @@ catalog-project/
 ├── css/
 │   └── style.css
 ├── js/
-│   └── script.js
+│   └── script.js                    ← נתוני הגלריה + שליחת הטופס דרך EmailJS
 ├── images/
-│   ├── logo.jpg
-│   ├── תמונת קינוחים לרקע.png
-│   ├── alpakores.jpg
-│   ├── brownies.png
-│   ├── tricolad.jpg
-│   ├── huledet_ben.png
-│   ├── huledet_bat.png
-│   └── cake_gvina.png
-├── function/
-│   ├── package.json
-│   └── index.js
-└── deploy.sh
+│   ├── logo.webp                    ← לוגו (Header)
+│   ├── hero-bg.webp                 ← רקע ה-Hero
+│   ├── תמונת רקע לשלב ב.png         ← רקע כללי של הדף (body)
+│   ├── products/                    ← 12 תמונות הגלריה (webp)
+│   ├── logo.jpg                     ← לא בשימוש
+│   ├── תמונת קינוחים לרקע.png       ← לא בשימוש
+│   ├── תמונת קינוחים לרקע_backup.png ← לא בשימוש
+│   ├── alpakores.jpg                ← לא בשימוש
+│   ├── brownies.png                 ← לא בשימוש
+│   ├── tricolad.jpg                 ← לא בשימוש
+│   ├── huledet_ben.png              ← לא בשימוש
+│   ├── huledet_bat.png              ← לא בשימוש
+│   └── cake_gvina.png               ← לא בשימוש
+├── package.json                     ← תלויות לכלים מקומיים (nodemailer ל-server.js, sharp)
+├── package-lock.json
+├── server.js                        ← legacy – ללא שימוש בפרודקשן
+├── deploy.sh                        ← legacy – ללא שימוש בפרודקשן
+└── function/                        ← legacy – ללא שימוש בפרודקשן
+    ├── package.json
+    └── index.js
 ```
 
 ---
 
 ## עמוד הקטלוג – מבנה
 
+### ניווט עליון
+- קישורי עוגן: בית (`#home`), גלריה (`#catalog`), צור קשר (`#contact`)
+
 ### Header
-- לוגו – `images/logo.jpg`, ממורכז
-- כותרת ראשית: "אומנות שאפשר להעריך"
-- כותרת משנה: "מארזי פרימיום בעבודת יד, עם תשומת לב לכל פרט"
-- רקע: `images/תמונת קינוחים לרקע.png`, בפילטר בהירות 0.7–0.8, cover
+- לוגו – `images/logo.webp`, ממורכז
+- כותרת ראשית: "קינוחים שעושים רושם עוד לפני הביס הראשון"
+- כותרות משנה: "מארזי פטיפורים בעבודת יד ובגימור מרהיב, מושלמים לאירוח ולפינוק" / "בחרו את המארז שלכם – ותנו למתוק לעשות את הרושם"
+- כשרות: "כל המוצרים בכשרות בד"ץ העדה החרדית"
+- רקע: `images/hero-bg.webp` (עם preload), cover
 
 ### הפניה לקטלוג
-- טקסט: "למיוחדים שלנו"
+- טקסט: "למארזים שלנו"
 - קישור עוגן (#catalog) עם גלילה חלקה
 
-### קטלוג מוצרים – 6 כרטיסים
+### גלריית קינוחים – 12 תמונות
+כותרת: "גלריית קינוחים", כותרת משנה: "כל ביס — יצירת אמנות קטנה".
 
-| קובץ תמונה | שם מוצר | תיאור | מחיר | סוג |
-|------------|---------|-------|------|-----|
-| `alpakores.jpg` | אלפחורס | עוגיות קרמל ממולאות ריבה ואגוזים, מצופות שוקולד | 120 ש"ח | חלבי |
-| `brownies.png` | בראוניס | קוביות בראוניס עשירות, רכות ונימוחות | 130 ש"ח | פרווה / חלבי |
-| `tricolad.jpg` | טריקולד | שלוש שכבות שוקולד מובחר – מפנק במיוחד | 180 ש"ח | חלבי |
-| `huledet_ben.png` | הולדת בן | מארז חגיגי לאירוח | 220 ש"ח | חלבי |
-| `huledet_bat.png` | הולדת בת | מארז חגיגי לאירוח | 220 ש"ח | חלבי |
-| `cake_gvina.png` | עוגת גבינה | עוגת גבינה קרמית, אפויה או קרה | 130 ש"ח | חלבי |
+הגלריה מציגה תמונות בלבד – ללא שמות מוצרים, תיאורים או מחירים. הנתונים מוגדרים במערך `galleryImages` ב-`js/script.js`, ולחיצה על תמונה פותחת אותה בהגדלה (Lightbox). הסדר בטבלה הוא סדר ההצגה בגלריה:
 
-עיצוב רספונסיבי: grid של 3 עמודות בדסקטופ, 2 בטאבלט, 1 במובייל.
+| # | קובץ תמונה (`images/products/`) | תיאור (alt) |
+|---|--------------------------------|-------------|
+| 1 | `tricolad-layers.webp` | טריקולד בשלוש שכבות שוקולד |
+| 2 | `white-chocolate-cake.webp` | עוגת שוקולד לבנה |
+| 3 | `cheesecake-plum.webp` | עוגת גבינה קרה מעוטרת בשזיף |
+| 4 | `braided-babka.webp` | בבקה שוקולד קלועה |
+| 5 | `cookie-layer-cake.webp` | עוגת שכבות עם קרם ומקרונים |
+| 6 | `alfajores-tower.webp` | אלפחורס מצופות שוקולד במתקן |
+| 7 | `dessert-platter-gold.webp` | מגש מבחר קינוחים ומאפים |
+| 8 | `chocolate-cups-display.webp` | קינוחי שוקולד בכוסות |
+| 9 | `baby-boy-gift-box.webp` | מארז מתנה להולדת בן |
+| 10 | `40th-birthday-cake.webp` | עוגת יום הולדת 40 |
+| 11 | `brownies-closeup.webp` | קוביות בראוניס |
+| 12 | `chocolate_nougat_pie.webp` | פאי שוקולד נוגט |
+
+עיצוב רספונסיבי: grid של 4 עמודות בדסקטופ, 3 בטאבלט (עד 1024px), 2 במובייל (עד 640px).
 
 ---
 
@@ -84,45 +134,31 @@ catalog-project/
 
 ---
 
-## Cloud Function – טיפול בטופס ושליחת מייל
+## שליחת הטופס – EmailJS
 
-### טריגר
-HTTP POST – POST /send-inquiry
+### זרימה
+1. אימות שדות בדפדפן (שם מלא, טלפון ישראלי תקין, אימייל אם הוזן)
+2. בניית גוף המייל (HTML) בדפדפן
+3. שליחה ישירה מהדפדפן דרך `emailjs.send` לכתובת בעלת החנות (מוגדרת בתבנית ב-EmailJS)
 
-### לוגיקה
-1. קבלת ה-body כ-JSON
-2. וידוא שדות חובה: fullName, phone
-3. בניית גוף המייל (HTML)
-4. שליחת מייל לכתובת בעלת החנות (env variable)
+### הגדרות (ב-`js/script.js`)
+- `EMAILJS_PUBLIC_KEY` – מפתח ציבורי של EmailJS
+- `EMAILJS_SERVICE_ID` – שירות המייל המחובר ב-EmailJS
+- `EMAILJS_TEMPLATE_ID` – תבנית המייל
 
-### משתני סביבה
-- `RESEND_API_KEY` – מפתח API של Resend
-- `TO_EMAIL` – כתובת המייל של בעלת החנות
+פרמטרים שנשלחים לתבנית: `fullName`, `phone`, `email`, `message`, `html_message`.
 
----
-
-## העלאה ל-Google Cloud
-
-```bash
-# יצירת bucket ופרסום האתר הסטטי
-gcloud storage buckets create gs://CATALOG_BUCKET_NAME --location=us-central1
-gcloud storage buckets update gs://CATALOG_BUCKET_NAME --web-main-page-suffix=index.html
-gcloud storage buckets add-iam-policy-binding gs://CATALOG_BUCKET_NAME --member=allUsers --role=roles/storage.objectViewer
-gcloud storage cp -r catalog-project/* gs://CATALOG_BUCKET_NAME/
-
-# פריסת Cloud Function
-cd catalog-project/function
-npm install
-gcloud functions deploy sendInquiry --runtime nodejs20 --trigger-http --allow-unauthenticated --set-env-vars RESEND_API_KEY=your_key,TO_EMAIL=owner@example.com --region us-central1
-```
+### אם ה-CDN של EmailJS חסום
+שאר האתר ממשיך לעבוד, והטופס מציג הודעה עם מספר טלפון ליצירת קשר במקום לשלוח.
 
 ---
 
-## מה צריך להכין לפני העלאה
+## Legacy – ללא שימוש בפרודקשן
 
-1. לוגו (`logo.jpg`) ✅
-2. תמונת רקע (`תמונת קינוחים לרקע.png`) ✅
-3. 6 תמונות מוצרים ✅
-4. חשבון Resend – לקבלת מפתח API
-5. כתובת המייל של בעלת החנות
-6. פרויקט Google Cloud פעיל עם billing מאופשר
+הקבצים הבאים נשארו מהמסלול הקודם (Google Cloud Storage + Cloud Function + Gmail SMTP). הם אינם חלק מהפרסום או מהטופס הנוכחיים, ונשמרים לתיעוד בלבד:
+
+- `deploy.sh` – העלאת האתר ל-bucket ב-Google Cloud Storage ופריסת Cloud Function
+- `function/` – Cloud Function (`sendInquiry`) לשליחת מייל דרך Gmail SMTP
+- `server.js` – שרת מקומי לשליחת מייל דרך Gmail SMTP (`npm start`)
+
+אין להריץ אותם כחלק מהפרסום. הפרסום מתבצע רק דרך push ל-`main` (ראו סעיף "פרסום").
