@@ -38,10 +38,10 @@ Cloudflare Dashboard ← Workers & Pages ← `zilufim` ← Deployments
    - אחרי שה-zone פעיל – חזרה לשלב 1. Cloudflare יוצר את רשומת ה-DNS ואת תעודת ה-SSL אוטומטית.
 
 ### GitHub Pages
-GitHub Pages אינו חלק ממסלול הפרסום הרשמי, והוא כבוי או אמור להיות כבוי (Settings ← Pages בריפו). הכתובת `ch0533145421.github.io/zilufim` אינה כתובת האתר.
+GitHub Pages אינו חלק ממסלול הפרסום הרשמי, והוא כבוי (Settings ← Pages בריפו). הכתובת `ch0533145421.github.io/zilufim` אינה כתובת האתר.
 
 ### שים לב
-מאחר שהאתר מוגש משורש הריפו, כל קובץ שנמצא ב-`main` נגיש ציבורית ב-`zilufim.pages.dev` – כולל `README.md`, `package.json` וקבצי ה-legacy. אין להכניס לריפו סודות או קבצים פרטיים.
+מאחר שהאתר מוגש משורש הריפו, כל קובץ שנמצא ב-`main` נגיש ציבורית ב-`zilufim.pages.dev` – כולל `README.md` ו-`package.json`. אין להכניס לריפו סודות או קבצים פרטיים.
 
 ---
 
@@ -69,13 +69,8 @@ catalog-project/
 │   ├── huledet_ben.png              ← לא בשימוש
 │   ├── huledet_bat.png              ← לא בשימוש
 │   └── cake_gvina.png               ← לא בשימוש
-├── package.json                     ← תלויות לכלים מקומיים (nodemailer ל-server.js, sharp)
-├── package-lock.json
-├── server.js                        ← legacy – ללא שימוש בפרודקשן
-├── deploy.sh                        ← legacy – ללא שימוש בפרודקשן
-└── function/                        ← legacy – ללא שימוש בפרודקשן
-    ├── package.json
-    └── index.js
+├── package.json                     ← תלויות לכלים מקומיים בלבד (sharp) – לא חלק מהאתר המפורסם
+└── package-lock.json
 ```
 
 ---
@@ -153,12 +148,6 @@ catalog-project/
 
 ---
 
-## Legacy – ללא שימוש בפרודקשן
+## Legacy
 
-הקבצים הבאים נשארו מהמסלול הקודם (Google Cloud Storage + Cloud Function + Gmail SMTP). הם אינם חלק מהפרסום או מהטופס הנוכחיים, ונשמרים לתיעוד בלבד:
-
-- `deploy.sh` – העלאת האתר ל-bucket ב-Google Cloud Storage ופריסת Cloud Function
-- `function/` – Cloud Function (`sendInquiry`) לשליחת מייל דרך Gmail SMTP
-- `server.js` – שרת מקומי לשליחת מייל דרך Gmail SMTP (`npm start`)
-
-אין להריץ אותם כחלק מהפרסום. הפרסום מתבצע רק דרך push ל-`main` (ראו סעיף "פרסום").
+קבצי המסלול הקודם (Google Cloud Storage + Cloud Function + Gmail SMTP) – `deploy.sh`, `function/` ו-`server.js` – הוסרו מהריפו, וזמינים בהיסטוריית git (גרסה אחרונה: commit `7ffd4be`).
