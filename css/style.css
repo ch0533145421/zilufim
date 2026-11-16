@@ -729,3 +729,22 @@ body::before {
   border-top: 1px solid rgba(212, 175, 55, 0.12);
   letter-spacing: 0.04em;
 }
+
+/* שורת קרדיט – עדינה, מתחת לשורת הזכויות */
+.site-credit {
+  font-size: 0.78rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+  color: rgba(212, 175, 55, 0.55);
+}
+
+.site-credit a {
+  color: inherit;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: color 0.2s ease;
+}
+
+.site-credit a:hover {
+  color: #e8cd6b;
+}
