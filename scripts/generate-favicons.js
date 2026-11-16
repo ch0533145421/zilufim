@@ -8,8 +8,12 @@ const root = path.join(__dirname, '..');
 const svg = fs.readFileSync(path.join(root, 'favicon.svg'));
 
 // iOS applies its own rounded mask and fills transparency with black,
-// so the apple-touch-icon is a full-bleed square without rounded corners.
-const squareSvg = Buffer.from(svg.toString().replace(/ rx="\d+"/, ''));
+// so the apple-touch-icon uses a full-bleed square background.
+const squareSvg = Buffer.from(
+  svg
+    .toString()
+    .replace(/<circle[^>]*fill="([^"]+)"[^>]*\/>/, '<rect width="64" height="64" fill="$1"/>')
+);
 
 const render = (source, size) =>
   sharp(source, { density: Math.ceil((72 * size) / 64) })
