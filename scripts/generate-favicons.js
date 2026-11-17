@@ -1,25 +1,54 @@
-// Generates PNG and ICO favicons from favicon.svg.
+// Generates the site favicons from the client's emblem (images/favicon-source.png):
+// black line art on white, recolored to the site palette — gold lines on a dark disc.
 // Usage: node scripts/generate-favicons.js
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
 const root = path.join(__dirname, '..');
-const svg = fs.readFileSync(path.join(root, 'favicon.svg'));
+const SOURCE = path.join(root, 'images', 'favicon-source.png');
+const GOLD = '#c3a174'; // sampled from images/logo.webp
+const DARK = '#1a1008';
 
-// iOS applies its own rounded mask and fills transparency with black,
-// so the apple-touch-icon uses a full-bleed square background.
-const squareSvg = Buffer.from(
-  svg
-    .toString()
-    .replace(/<circle[^>]*fill="([^"]+)"[^>]*\/>/, '<rect width="64" height="64" fill="$1"/>')
-);
-
-const render = (source, size) =>
-  sharp(source, { density: Math.ceil((72 * size) / 64) })
-    .resize(size, size)
-    .png({ compressionLevel: 9 })
+// Line art -> alpha mask (dark lines become opaque). `thicken` (blur sigma in
+// source pixels) spreads and re-saturates the strokes, so thin lines survive
+// downscaling to tiny sizes.
+async function lineMask(size, thicken = 0) {
+  let { data: mask, info } = await sharp(SOURCE)
+    .greyscale()
+    .negate()
+    .linear(1.6, -40)
+    .toColourspace('b-w')
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const raw = { raw: { width: info.width, height: info.height, channels: 1 } };
+  if (thicken > 0) {
+    mask = await sharp(mask, raw).blur(thicken).linear(4, 0).toColourspace('b-w').raw().toBuffer();
+  }
+  return sharp(mask, raw)
+    .resize(size, size, { kernel: 'lanczos3' })
+    .toColourspace('b-w')
+    .raw()
     .toBuffer();
+}
+
+async function render(size, { shape = 'circle', thicken = 0 } = {}) {
+  const background =
+    shape === 'circle'
+      ? `<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="${DARK}"/>`
+      : `<rect width="${size}" height="${size}" fill="${DARK}"/>`;
+  const base = Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">${background}</svg>`
+  );
+
+  const mask = await lineMask(size, thicken);
+  const gold = await sharp({ create: { width: size, height: size, channels: 3, background: GOLD } })
+    .joinChannel(mask, { raw: { width: size, height: size, channels: 1 } })
+    .png()
+    .toBuffer();
+
+  return sharp(base).composite([{ input: gold }]).png({ compressionLevel: 9 }).toBuffer();
+}
 
 // ICO container with embedded PNG images (supported by all modern browsers).
 function buildIco(images) {
@@ -46,21 +75,27 @@ function buildIco(images) {
   return Buffer.concat([header, ...entries, ...images.map((i) => i.data)]);
 }
 
-(async () => {
-  const outputs = [
-    ['favicon-32.png', await render(svg, 32)],
-    ['icon-192.png', await render(svg, 192)],
-    ['apple-touch-icon.png', await render(squareSvg, 180)],
-  ];
-  const ico = buildIco([
-    { size: 16, data: await render(svg, 16) },
-    { size: 32, data: await render(svg, 32) },
-    { size: 48, data: await render(svg, 48) },
-  ]);
-  outputs.push(['favicon.ico', ico]);
+module.exports = { render };
 
-  for (const [name, data] of outputs) {
-    fs.writeFileSync(path.join(root, name), data);
-    console.log(`${name}: ${data.length} B`);
-  }
-})();
+if (require.main === module) {
+  (async () => {
+    const outputs = [
+      ['favicon-32.png', await render(32, { thicken: 6 })],
+      ['icon-192.png', await render(192)],
+      // iOS applies its own rounded mask and fills transparency with black,
+      // so the apple-touch-icon uses a full-bleed square background.
+      ['apple-touch-icon.png', await render(180, { shape: 'square' })],
+    ];
+    const ico = buildIco([
+      { size: 16, data: await render(16, { thicken: 8 }) },
+      { size: 32, data: await render(32, { thicken: 6 }) },
+      { size: 48, data: await render(48, { thicken: 4 }) },
+    ]);
+    outputs.push(['favicon.ico', ico]);
+
+    for (const [name, data] of outputs) {
+      fs.writeFileSync(path.join(root, name), data);
+      console.log(`${name}: ${data.length} B`);
+    }
+  })();
+}
